@@ -159,6 +159,12 @@ app.delete('/blabbers/:id/votes', ({ params: { id } }, res) => {
 })
 
 
+// 404 endpoint
+app.use('*', (req, res) => {
+  res.statusCode = 404
+  res.send();
+})
+
 const port = process.env.PORT || 3000
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}!`)
