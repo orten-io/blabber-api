@@ -66,6 +66,14 @@ app.use((err, req, res, next) => {
 })
 
 
+// Add CORS headers
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*")
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+  res.header("Access-Control-Allow-Methods", "OPTIONS, GET, POST, DELETE")
+  next()
+})
+
 app.get('/blabbers', (req, res) => {
   res.send(blabbers)
 })
