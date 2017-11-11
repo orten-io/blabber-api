@@ -1,1 +1,1 @@
-web: PORT=80 npm run start
+web: npm run start
