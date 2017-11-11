@@ -35,12 +35,34 @@ const addCommentToBlabber = (id, text) => {
 }
 
 
+// Handle input json syntax errors
+app.use((err, req, res, next) => {
+  if (err instanceof SyntaxError) {
+    res.statusCode = 400
+    res.send({ error: 'INVALID_JSON' })
+    return
+  }
+
+  next(err)
+})
+
 
 app.get('/blabbers', (req, res) => {
   res.send(blabbers)
 })
 
 app.post('/blabbers', ({ body }, res) => {
+  if (!body.text) {
+    res.statusCode = 400
+    res.send({ error: 'TEXT_REQUIRED' })
+  }
+
+  if (body.text.length > 600) {
+    res.statusCode = 400
+    res.send({ error: 'TEXT_MAX_LENGTH_600' })
+    return
+  }
+
   const newBlabber = createBlabber(body.text)
   res.statusCode = 201
   res.send(newBlabber)
@@ -63,6 +85,17 @@ app.get('/blabbers/:id/comments', ({ params: { id } }, res) => {
 })
 
 app.post('/blabbers/:id/comments', ({ params: { id }, body }, res) => {
+  if (!body.text) {
+    res.statusCode = 400
+    res.send({ error: 'TEXT_REQUIRED' })
+  }
+
+  if (body.text.length > 600) {
+    res.statusCode = 400
+    res.send({ error: 'TEXT_MAX_LENGTH_600' })
+    return
+  }
+
   const comment = addCommentToBlabber(id, body.text)
   res.statusCode = 201
   res.send(comment)
@@ -71,5 +104,5 @@ app.post('/blabbers/:id/comments', ({ params: { id }, body }, res) => {
 
 const port = process.env.PORT || 3000
 app.listen(port, () => {
-  console.log('Example app listening on port 3000!')
+  console.log(`Example app listening on port ${port}!`)
 })
