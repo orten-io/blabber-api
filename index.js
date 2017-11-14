@@ -5,7 +5,7 @@ const uuid = require('uuid/v4')
 const app = express()
 app.use(bodyParser.json())
 
-const blabbers = [
+let blabbers = [
   {
     id: 'd9f91448-6da4-4dfb-bd17-6cbf290f4a3b',
     text: 'If I won the award for laziness, I would send somebody to pick it up for me.',
@@ -37,7 +37,7 @@ const createBlabber = text => {
     votes: 0,
     comments: []
   }
-  blabbers.push(newBlabber)
+  blabbers = [newBlabber, ...blabbers]
   return newBlabber
 }
 const getBlabberById = id => blabbers.filter(blabber => blabber.id === id)[0] || null
@@ -49,7 +49,7 @@ const addCommentToBlabber = (id, text) => {
     id: uuid(),
     text
   }
-  blabber.comments.push(comment)
+  blabber.comments = [comment, ...blabber.comments]
   return comment
 }
 
